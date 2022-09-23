@@ -1,3 +1,6 @@
+let cpuScore = 0;
+let playerScore = 0;
+
 function getComputerChoice() {
   return Math.floor(Math.random() * 3);
 }
@@ -30,17 +33,46 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
-function game(rounds) {
+function game(option) {
   let result = 0;
-  for (let i = 0; i < rounds; i++) {
-    result += playRound(
-      prompt(`Round ${i + 1}: Rock, Paper or Scissors?`),
-      getComputerChoice()
-    );
-  }
+  let display = document.querySelector("#display");
+  let player = document.querySelector("#player");
+  let cpu = document.querySelector("#cpu");
+  result += playRound(option, getComputerChoice());
+
   if (result == 0) {
-    alert("Draw");
-  } else result > 0 ? alert("Win") : alert("Lose");
+    display.innerText = "Result: Draw";
+  } else if (result > 0) {
+    display.innerText = "Result: Win";
+    playerScore++;
+    player.innerText = `You: ${playerScore}`
+    
+  } else {
+    display.innerText = "Result: Lose";
+    cpu.innerText = `Computer: ${cpuScore}`
+    cpuScore++;
+  }
+
+  if (playerScore >= 5) {
+    display.innerText = "PLAYER WON! Starting new game...";
+    playerScore = 0;
+    cpuScore = 0;
+    player.innerText = `You: ${playerScore}`
+    cpu.innerText = `Computer: ${cpuScore}`
+  } 
+  else if (cpuScore >= 5) {
+    display.innerText = "CPU WON! Starting new game...";
+    playerScore = 0;
+    cpuScore = 0;
+    player.innerText = `You: ${playerScore}`
+    cpu.innerText = `Computer: ${cpuScore}`
+  }
 }
 
-game(5);
+let button = document.querySelectorAll("button");
+
+button.forEach((button) => {
+  button.addEventListener("click", () => {
+    game(button.innerText);
+  });
+});
